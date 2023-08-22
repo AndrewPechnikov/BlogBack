@@ -3,12 +3,13 @@ import mongoose from "mongoose"
 import { registrValidation, loginValidation, postCreateValidation } from "./validations/validations.js"
 
 import multer from "multer";
+import cors from "cors"
 
 
 import { PostController, UserController } from "./controllers/index.js";
 import { handleValidationErrors, checkAuth } from './utils/index.js'
 
-mongoose.connect('mongodb+srv://admin:3141271828@cluster0.cv1423j.mongodb.net/blog?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://admin:3141271828@cluster0.cv1423j.mongodb.net/?retryWrites=true&w=majority')
     .then(() => {
         console.log("DB is ok")
     })
@@ -30,6 +31,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 app.use(express.json())
+app.use(cors())
 app.use('/uploads', express.static("uploads"))
 
 app.get('/auth/me', checkAuth, UserController.getMe)
@@ -42,7 +44,10 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
     })
 })
 
+app.get('/tags', PostController.getLastTags)
+
 app.get('/posts', PostController.getAll)
+
 app.get('/posts/:id', PostController.getOne)
 app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, PostController.create)
 app.delete('/posts/:id', checkAuth, PostController.remove)
