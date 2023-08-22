@@ -25,8 +25,8 @@ app.post('/auth/registr', registrValidation, UserControl.registr)
 app.get('/posts', PostControl.getAll)
 app.get('/posts/:id', PostControl.getOne)
 app.post('/posts', checkAuth, postCreateValidation, PostControl.create)
-// app.delete('/posts',  PostControl.remove)
-// app.patch('/posts',  PostControl.patch)
+app.delete('/posts/:id', checkAuth, PostControl.remove)
+app.patch('/posts/:id', checkAuth, PostControl.update)
 
 app.listen(4444, (err) => {
     if (err) {
