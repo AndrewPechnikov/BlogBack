@@ -1,10 +1,12 @@
 import express from "express"
 import mongoose from "mongoose"
 import { registrValidation, loginValidation, postCreateValidation } from "./validations/validations.js"
-import checkAuth from "./utils/checkAuth.js";
 
-import * as UserControl from "./controlers/UserController.js"
-import * as PostControl from "./controlers/PostController.js"
+import multer from "multer";
+
+
+import { PostController, UserController } from "./controllers/index.js";
+import { handleValidationErrors, checkAuth } from './utils/index.js'
 
 mongoose.connect('mongodb+srv://admin:3141271828@cluster0.cv1423j.mongodb.net/blog?retryWrites=true&w=majority')
     .then(() => {
@@ -16,17 +18,35 @@ mongoose.connect('mongodb+srv://admin:3141271828@cluster0.cv1423j.mongodb.net/bl
 
 const app = express();
 
+const storage = multer.diskStorage({
+    destination: (_, __, cd) => {
+        cd(null, "uploads")
+    },
+    filename: (_, file, cd) => {
+        cd(null, file.originalname)
+    },
+});
+
+const upload = multer({ storage })
+
 app.use(express.json())
+app.use('/uploads', express.static("uploads"))
 
-app.get('/auth/me', checkAuth, UserControl.getMe)
-app.post('/auth/login', loginValidation, UserControl.login)
-app.post('/auth/registr', registrValidation, UserControl.registr)
+app.get('/auth/me', checkAuth, UserController.getMe)
+app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login)
+app.post('/auth/registr', registrValidation, handleValidationErrors, UserController.registr)
 
-app.get('/posts', PostControl.getAll)
-app.get('/posts/:id', PostControl.getOne)
-app.post('/posts', checkAuth, postCreateValidation, PostControl.create)
-app.delete('/posts/:id', checkAuth, PostControl.remove)
-app.patch('/posts/:id', checkAuth, PostControl.update)
+app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
+    res.json({
+        url: `/uploads/${req.file.originalname}`
+    })
+})
+
+app.get('/posts', PostController.getAll)
+app.get('/posts/:id', PostController.getOne)
+app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, PostController.create)
+app.delete('/posts/:id', checkAuth, PostController.remove)
+app.patch('/posts/:id', postCreateValidation, handleValidationErrors, checkAuth, PostController.update)
 
 app.listen(4444, (err) => {
     if (err) {
@@ -34,3 +54,5 @@ app.listen(4444, (err) => {
     }
     console.log("Server OK")
 });
+
+
