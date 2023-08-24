@@ -16,5 +16,5 @@ export const postCreateValidation = [
     body('title', "Введіть заголовок статті").isLength({ min: 3 }).isString(),
     body('text', "Введіть текст статті").isLength({ min: 10 }).isString(),
     body("tags", "Невірний формат тегів (вкажіть массив)").optional().isArray(),
-    body("imageUrl", "Не вірне посилання на зображення").optional().isURL(), // .optional, для не обов'язкового параметру
+    body("imageUrl", "Не вірне посилання на зображення").optional(), // .optional, для не обов'язкового параметру
 ]
