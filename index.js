@@ -4,6 +4,8 @@ import { registrValidation, loginValidation, postCreateValidation } from "./vali
 
 import multer from "multer";
 import cors from "cors"
+import dotenv from 'dotenv'
+dotenv.config()
 
 
 import { PostController, UserController } from "./controllers/index.js";
