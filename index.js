@@ -34,6 +34,7 @@ app.use(express.json())
 app.use(cors())
 app.use('/uploads', express.static("uploads"))
 
+
 app.get('/auth/me', checkAuth, UserController.getMe)
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login)
 app.post('/auth/registr', registrValidation, handleValidationErrors, UserController.registr)
