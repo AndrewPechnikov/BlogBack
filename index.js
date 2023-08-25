@@ -9,7 +9,7 @@ import cors from "cors"
 import { PostController, UserController } from "./controllers/index.js";
 import { handleValidationErrors, checkAuth } from './utils/index.js'
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect("mongodb+srv://admin:3141271828@cluster0.cv1423j.mongodb.net/?retryWrites=true&w=majority")
     .then(() => {
         console.log("DB is ok")
     })
