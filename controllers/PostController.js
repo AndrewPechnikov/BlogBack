@@ -63,7 +63,7 @@ export const getOne = async (req, res) => {
     try {
         const postId = req.params.id;
         PostModel.findOneAndUpdate(
-            { _id: postId }, { $inc: { viewsCount: 1 } }, { returnDocument: "After" })
+            { _id: postId }, { $inc: { viewsCount: 1 } }, { returnDocument: "After" }).populate('user')
             .then(doc => res.json(doc))
             .catch(err => res.status(500).json({ message: "Не вдалось отримати статтю." }))
 

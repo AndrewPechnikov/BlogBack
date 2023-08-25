@@ -9,7 +9,7 @@ import cors from "cors"
 import { PostController, UserController } from "./controllers/index.js";
 import { handleValidationErrors, checkAuth } from './utils/index.js'
 
-mongoose.connect('mongodb+srv://admin:3141271828@cluster0.cv1423j.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
         console.log("DB is ok")
     })
@@ -53,7 +53,7 @@ app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, Post
 app.delete('/posts/:id', checkAuth, PostController.remove)
 app.patch('/posts/:id', postCreateValidation, handleValidationErrors, checkAuth, PostController.update)
 
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
     if (err) {
         return console.log(err)
     }

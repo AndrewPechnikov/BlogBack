@@ -24,7 +24,7 @@ const PostSchema = new mongoose.Schema({
         required: true,
     },
 
-    ImageUrl: String, // необов'язкове поле
+    imageUrl: String, // необов'язкове поле
 
 },
     { timestamps: true, }, //дата створення і оновлення
