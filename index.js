@@ -9,7 +9,7 @@ import cors from "cors"
 import { PostController, UserController } from "./controllers/index.js";
 import { handleValidationErrors, checkAuth } from './utils/index.js'
 
-mongoose.connect(process.env.MONGODB_URL)
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
         console.log("DB is ok")
     })
